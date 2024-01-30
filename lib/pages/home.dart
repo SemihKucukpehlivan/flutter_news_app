@@ -33,7 +33,10 @@ class _HomeState extends State<Home> {
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Flutter"),
+            Text(
+              "Flutter",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             Text(
               "News",
               style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
@@ -43,74 +46,209 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         elevation: 0.0,
       ),
-      body: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.only(left: 20),
-              height: 70,
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: categories.length,
-                itemBuilder: (context, index) {
-                  return CategoryTile(
-                    image: categories[index].image,
-                    categoryName: categories[index].categoryName,
-                  );
-                },
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.only(left: 20),
+                height: 70,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    return CategoryTile(
+                      image: categories[index].image,
+                      categoryName: categories[index].categoryName,
+                    );
+                  },
+                ),
               ),
-            ),
-            const Padding(
-              padding:
-                  EdgeInsets.only(left: 16, right: 16, top: 25, bottom: 25),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Breaking News!",
-                    style: TextStyle(
-                        color: Colors.black,
+              const Padding(
+                padding:
+                    EdgeInsets.only(left: 16, right: 16, top: 25, bottom: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Breaking News!",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24),
+                    ),
+                    Text(
+                      "View All",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        fontSize: 18),
-                  ),
-                  Text(
-                    "View All",
-                    style: TextStyle(color: Colors.blue, fontSize: 15),
-                  ),
-                ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            CarouselSlider.builder(
-              itemCount: slider.length,
-              itemBuilder: (context, index, realIndex) {
-                String? res = slider[index].image;
-                String? res1 = slider[index].name;
-                return buildImage(res!, index, res1!);
-              },
-              options: CarouselOptions(
-                height: 250,
-                autoPlay: true,
-                enlargeCenterPage: true,
-                enlargeStrategy: CenterPageEnlargeStrategy.height,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    activeIndex = index;
-                  });
+              CarouselSlider.builder(
+                itemCount: slider.length,
+                itemBuilder: (context, index, realIndex) {
+                  String? res = slider[index].image;
+                  String? res1 = slider[index].name;
+                  return buildImage(res!, index, res1!);
                 },
+                options: CarouselOptions(
+                  height: 250,
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  enlargeStrategy: CenterPageEnlargeStrategy.height,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      activeIndex = index;
+                    });
+                  },
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Center(child: buildIndicator())
-          ],
+              const SizedBox(height: 20),
+              Center(child: buildIndicator()),
+              const SizedBox(height: 30.0),
+              const Padding(
+                padding: EdgeInsets.only(left: 10.0, right: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Trending News!",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
+                    Text(
+                      "View All",
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Material(
+                  elevation: 3,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            "assets/images/sport.jpg",
+                            height: 120,
+                            width: 120,
+                            fit: BoxFit.cover,
+                          ),
+                        )),
+                        const SizedBox(width: 8),
+                        Column(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width / 1.8,
+                              child: const Text(
+                                "Rui Costa  outsprint breakway to  win stage 15 ",
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(height: 7),
+                            Container(
+                              width: MediaQuery.of(context).size.width / 1.8,
+                              child: const Text(
+                                "Then a final kick to beat kamna",
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Material(
+                  elevation: 3,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            "assets/images/sport.jpg",
+                            height: 120,
+                            width: 120,
+                            fit: BoxFit.cover,
+                          ),
+                        )),
+                        const SizedBox(width: 8),
+                        Column(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width / 1.8,
+                              child: const Text(
+                                "Rui Costa  outsprint breakway to  win stage 15 ",
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(height: 7),
+                            Container(
+                              width: MediaQuery.of(context).size.width / 1.8,
+                              child: const Text(
+                                "Then a final kick to beat kamna",
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget buildImage(String image, int index, String name) => Container(
-        margin: EdgeInsets.symmetric(horizontal: 5.0),
+        margin: const EdgeInsets.symmetric(horizontal: 5.0),
         child: Stack(
           children: [
             ClipRRect(
