@@ -4,6 +4,7 @@ import 'package:flutter_news_app/model/category_model.dart';
 import 'package:flutter_news_app/model/slider_model.dart';
 import 'package:flutter_news_app/services/data.dart';
 import 'package:flutter_news_app/services/slider_data.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,7 +16,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<CategoryModel> categories = [];
   List<SliderModel> slider = [];
-  
+
   int activeIndex = 0;
 
   @override
@@ -44,6 +45,7 @@ class _HomeState extends State<Home> {
       ),
       body: Container(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               margin: EdgeInsets.only(left: 20),
@@ -60,8 +62,25 @@ class _HomeState extends State<Home> {
                 },
               ),
             ),
-            SizedBox(
-              height: 30.0,
+            const Padding(
+              padding:
+                  EdgeInsets.only(left: 16, right: 16, top: 25, bottom: 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Breaking News!",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
+                  Text(
+                    "View All",
+                    style: TextStyle(color: Colors.blue, fontSize: 15),
+                  ),
+                ],
+              ),
             ),
             CarouselSlider.builder(
               itemCount: slider.length,
@@ -82,6 +101,8 @@ class _HomeState extends State<Home> {
                 },
               ),
             ),
+            const SizedBox(height: 20),
+            Center(child: buildIndicator())
           ],
         ),
       ),
@@ -113,7 +134,7 @@ class _HomeState extends State<Home> {
                   color: Colors.black26),
               child: Text(
                 name,
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.white,
                     fontSize: 23.0,
                     fontWeight: FontWeight.bold),
@@ -121,6 +142,13 @@ class _HomeState extends State<Home> {
             )
           ],
         ),
+      );
+
+  Widget buildIndicator() => AnimatedSmoothIndicator(
+        activeIndex: activeIndex,
+        count: slider.length,
+        effect: const SlideEffect(
+            dotWidth: 15, dotHeight: 15, activeDotColor: Colors.blue),
       );
 }
 
