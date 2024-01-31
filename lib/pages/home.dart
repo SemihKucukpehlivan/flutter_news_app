@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     categories = getCategories();
-    slider = getSliders();
+    getSlider();
     getNews();
     super.initState();
   }
@@ -36,6 +36,15 @@ class _HomeState extends State<Home> {
     News newsClass = News();
     await newsClass.getNews();
     articles = newsClass.news;
+    setState(() {
+      _loading = false;
+    });
+  }
+
+  getSlider() async {
+    Sliders sliderData = Sliders();
+    await sliderData.getSlider();
+    slider = sliderData.sliders;
     setState(() {
       _loading = false;
     });
@@ -108,11 +117,16 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     CarouselSlider.builder(
-                      itemCount: slider.length,
+                      itemCount: 5,
                       itemBuilder: (context, index, realIndex) {
-                        String? res = slider[index].image;
-                        String? res1 = slider[index].name;
-                        return buildImage(res!, index, res1!);
+                        if (index < slider.length) {
+                          String? res = slider[index].urlToImage;
+                          String? res1 = slider[index].title;
+                          return buildImage(res!, index, res1!);
+                        } else {
+                          return SizedBox
+                              .shrink(); // Boş bir widget döndürülebilir.
+                        }
                       },
                       options: CarouselOptions(
                         height: 250,
@@ -161,7 +175,7 @@ class _HomeState extends State<Home> {
                         itemCount: articles.length,
                         itemBuilder: (context, index) {
                           return BlogTile(
-                             url: articles[index].url!,
+                              url: articles[index].url!,
                               desc: articles[index].description!,
                               imageUrl: articles[index].urlToImage!,
                               title: articles[index].title!);
@@ -182,8 +196,8 @@ class _HomeState extends State<Home> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                image,
+              child: CachedNetworkImage(
+                imageUrl: image,
                 height: 250,
                 fit: BoxFit.cover,
                 width: MediaQuery.of(context).size.width,
@@ -213,7 +227,7 @@ class _HomeState extends State<Home> {
 
   Widget buildIndicator() => AnimatedSmoothIndicator(
         activeIndex: activeIndex,
-        count: slider.length,
+        count: 5,
         effect: const SlideEffect(
             dotWidth: 15, dotHeight: 15, activeDotColor: Colors.blue),
       );
