@@ -1,34 +1,42 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_news_app/model/show_category.dart';
+import 'package:flutter_news_app/model/article_model.dart';
+import 'package:flutter_news_app/model/slider_model.dart';
 import 'package:flutter_news_app/pages/article_view.dart';
-import 'package:flutter_news_app/services/show_category_news.dart';
+import 'package:flutter_news_app/services/news.dart';
+import 'package:flutter_news_app/services/slider_data.dart';
 
-class CategoryNews extends StatefulWidget {
-  String name;
-  CategoryNews({required this.name});
+class AllNews extends StatefulWidget {
+  String news;
+  AllNews({required this.news});
 
   @override
-  State<CategoryNews> createState() => _CategoryNewsState();
+  State<AllNews> createState() => _AllNewsState();
 }
 
-class _CategoryNewsState extends State<CategoryNews> {
-  List<ShowCategroryModel> categories = [];
-  bool _loading = true;
+class _AllNewsState extends State<AllNews> {
+  List<SliderModel> slider = [];
+  List<ArticleModel> articles = [];
 
   @override
   void initState() {
+    getSlider();
     getNews();
     super.initState();
   }
 
   getNews() async {
-    ShowCategroryNews showCategoriesNews = ShowCategroryNews();
-    await showCategoriesNews.getCategoriesNews(widget.name.toLowerCase());
-    categories = showCategoriesNews.categories;
-    setState(() {
-      _loading = false;
-    });
+    News newsClass = News();
+    await newsClass.getNews();
+    articles = newsClass.news;
+    setState(() {});
+  }
+
+  getSlider() async {
+    Sliders sliderData = Sliders();
+    await sliderData.getSlider();
+    slider = sliderData.sliders;
+    setState(() {});
   }
 
   @override
@@ -36,7 +44,7 @@ class _CategoryNewsState extends State<CategoryNews> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.name,
+          widget.news + " News",
           style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -47,13 +55,22 @@ class _CategoryNewsState extends State<CategoryNews> {
         child: ListView.builder(
           shrinkWrap: true,
           physics: ClampingScrollPhysics(),
-          itemCount: categories.length,
+          itemCount:
+              widget.news == "Breaking" ? slider.length : articles.length,
           itemBuilder: (context, index) {
-            return ShowCategrory(
-              image: categories[index].urlToImage!,
-              desc: categories[index].description!,
-              title: categories[index].title!,
-              url: categories[index].url!,
+            return AllNewsSection(
+              image: widget.news == "Breaking"
+                  ? slider[index].urlToImage!
+                  : articles[index].urlToImage!,
+              desc: widget.news == "Breaking"
+                  ? slider[index].description!
+                  : articles[index].description!,
+              title: widget.news == "Breaking"
+                  ? slider[index].title!
+                  : articles[index].title!,
+              url: widget.news == "Breaking"
+                  ? slider[index].url!
+                  : articles[index].url!,
             );
           },
         ),
@@ -62,9 +79,9 @@ class _CategoryNewsState extends State<CategoryNews> {
   }
 }
 
-class ShowCategrory extends StatelessWidget {
+class AllNewsSection extends StatelessWidget {
   String image, desc, title, url;
-  ShowCategrory(
+  AllNewsSection(
       {required this.image,
       required this.desc,
       required this.title,

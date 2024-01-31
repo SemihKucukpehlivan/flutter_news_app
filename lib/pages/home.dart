@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_news_app/model/article_model.dart';
 import 'package:flutter_news_app/model/category_model.dart';
 import 'package:flutter_news_app/model/slider_model.dart';
+import 'package:flutter_news_app/pages/all_news.dart';
 import 'package:flutter_news_app/pages/article_view.dart';
+import 'package:flutter_news_app/pages/category_news.dart';
 import 'package:flutter_news_app/services/data.dart';
 import 'package:flutter_news_app/services/news.dart';
 import 'package:flutter_news_app/services/slider_data.dart';
@@ -92,25 +94,35 @@ class _HomeState extends State<Home> {
                         },
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(
+                    Padding(
+                      padding: const EdgeInsets.only(
                           left: 16, right: 16, top: 25, bottom: 25),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "Breaking News!",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24),
                           ),
-                          Text(
-                            "View All",
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        AllNews(news: "Breaking"),
+                                  ));
+                            },
+                            child: const Text(
+                              "View All",
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ],
@@ -143,24 +155,34 @@ class _HomeState extends State<Home> {
                     const SizedBox(height: 20),
                     Center(child: buildIndicator()),
                     const SizedBox(height: 30.0),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(left: 10.0, right: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "Trending News!",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20),
                           ),
-                          Text(
-                            "View All",
-                            style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        AllNews(news: "Trending"),
+                                  ));
+                            },
+                            child: const Text(
+                              "View All",
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ],
                       ),
@@ -239,37 +261,46 @@ class CategoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(right: 16),
-      child: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: Image.asset(
-              image,
-              width: 120,
-              height: 70,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Container(
-            width: 120,
-            height: 70,
-            decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CategoryNews(name: categoryName),
+            ));
+      },
+      child: Container(
+        margin: EdgeInsets.only(right: 16),
+        child: Stack(
+          children: [
+            ClipRRect(
               borderRadius: BorderRadius.circular(6),
-              color: Colors.black26,
-            ),
-            child: Center(
-              child: Text(
-                categoryName,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500),
+              child: Image.asset(
+                image,
+                width: 120,
+                height: 70,
+                fit: BoxFit.cover,
               ),
             ),
-          ),
-        ],
+            Container(
+              width: 120,
+              height: 70,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: Colors.black26,
+              ),
+              child: Center(
+                child: Text(
+                  categoryName,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
