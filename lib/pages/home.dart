@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_news_app/model/article_model.dart';
 import 'package:flutter_news_app/model/category_model.dart';
 import 'package:flutter_news_app/model/slider_model.dart';
+import 'package:flutter_news_app/pages/article_view.dart';
 import 'package:flutter_news_app/services/data.dart';
 import 'package:flutter_news_app/services/news.dart';
 import 'package:flutter_news_app/services/slider_data.dart';
@@ -160,6 +161,7 @@ class _HomeState extends State<Home> {
                         itemCount: articles.length,
                         itemBuilder: (context, index) {
                           return BlogTile(
+                             url: articles[index].url!,
                               desc: articles[index].description!,
                               imageUrl: articles[index].urlToImage!,
                               title: articles[index].title!);
@@ -260,61 +262,75 @@ class CategoryTile extends StatelessWidget {
 }
 
 class BlogTile extends StatelessWidget {
-  String imageUrl, title, desc;
-  BlogTile({required this.desc, required this.imageUrl, required this.title});
+  String imageUrl, title, desc, url;
+  BlogTile(
+      {required this.desc,
+      required this.imageUrl,
+      required this.title,
+      required this.url});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Material(
-          elevation: 3,
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                      child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: CachedNetworkImage(
-                       imageUrl: imageUrl,
-                      height: 120,
-                      width: 120,
-                      fit: BoxFit.cover,
-                    ),
-                  )),
-                  const SizedBox(width: 8),
-                  Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width / 1.8,
-                        child: Text(
-                          title,
-                          maxLines: 2,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ArticleView(blogUrl: url),
+            ));
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 10),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Material(
+            elevation: 3,
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        imageUrl: imageUrl,
+                        height: 120,
+                        width: 120,
+                        fit: BoxFit.cover,
                       ),
-                      const SizedBox(height: 7),
-                      Container(
-                        width: MediaQuery.of(context).size.width / 1.8,
-                        child: Text(
-                          desc,
-                          maxLines: 3,
-                          style: const TextStyle(
-                            color: Colors.black54,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                    )),
+                    const SizedBox(width: 8),
+                    Column(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width / 1.8,
+                          child: Text(
+                            title,
+                            maxLines: 2,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        const SizedBox(height: 7),
+                        Container(
+                          width: MediaQuery.of(context).size.width / 1.8,
+                          child: Text(
+                            desc,
+                            maxLines: 3,
+                            style: const TextStyle(
+                              color: Colors.black54,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
